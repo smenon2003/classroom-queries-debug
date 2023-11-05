@@ -1,23 +1,22 @@
 class CoursesController < ApplicationController
   def index
     @courses = Course.all.order({ :created_at => :desc })
-
     render({ :template => "courses/index" })
   end
 
   def show
     the_id = params.fetch("path_id")
     @course = Course.where({:id => the_id }).at(0)
-
+    @students = Student.where({ :id => @enrollment.student_id })
     render({ :template => "courses/show" })
   end
 
   def create
     @course = Course.new
     @course.title = params.fetch("query_title")
-    @course.term_offered = params.fetch("query_term_")
+    @course.term_offered = params.fetch("query_term_offered")
     @course.department_id = params.fetch("query_department_id")
-
+  
     if @course.valid?
       @course.save
       redirect_to("/courses", { :notice => "Course created successfully." })

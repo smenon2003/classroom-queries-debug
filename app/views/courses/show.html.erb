@@ -1,5 +1,5 @@
 <h1>
-  Course #<%= course.id %> details
+  Course #<%= @course.id %> details
 </h1>
 
 <div>
@@ -22,23 +22,23 @@
       Title
     </label>
 
-    <input type="text" id="title_box" name="query_title">
+    <input type="text" id="title_box" name="query_title" value="<%= @course.title %>" >
   </div>
 
   <div>
-    <label for="term_offered_box">
+    <label for="query_term_offered">
       Term offered
     </label>
 
-    <input type="text" id="term_offered_box" name="query_term_offered" value="<%= @course.term_offered %>">
+    <input type="text" id="query_term_offered" name="query_term_offered" value="<%= @course.term_offered %>">
   </div>
 
   <div>
-    <label for="department_id_box">
+    <label for="query_department_id">
       Department
     </label>
 
-    <select id="department_id_box" name="query_department_id">
+    <select id="query_department_id" name="query_department_offered">
       <% Department.order({ :name => :asc }).each do |a_department| %>
         <% if a_department.id == @course.department_id %>
           <option value="<%= a_department.id %>" selected>
@@ -65,7 +65,7 @@
     Title
   </dt>
   <dd>
-    <%= course.title %>
+    <%= @course.title %>
   </dd>
 
   <dt>
@@ -87,7 +87,7 @@
     Number of enrolled students
   </dt>
   <dd>
-    <%= enrollment.where({ :course_id => @course.id }) %>
+    <%= Enrollment.where({ :course_id => @course.id }) %>
   </dd>
 </dl>
 
@@ -95,11 +95,9 @@
 
 <h2>Roster</h2>
 <ul>
-  <% Enrollment.where({ :course_id => @course.id }).each do |enrollment| %>
-    <% student = Student.where({ :id => enrollment.student_id }).at(0) %>
+  <% @students.each do |enrollment| %>
     <li>
-      <a href="/students/<%= student.id %>">
-        <%= student.first_name %> <%= student.last_name %>
+      <a href="/students/<%= @students.id %>">
       </a>
     </li>
   <% end %>
